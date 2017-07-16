@@ -1,0 +1,24 @@
+{
+  "name": "octo-tentacle",
+  "version": "0.0.1",
+  "description": "A node for the octo system.",
+  "main": "tentacle.js",
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ronin11/octo-tentacle.git"
+  },
+  "author": "Ronin11",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ronin11/octo-tentacle/issues"
+  },
+  "homepage": "https://github.com/Ronin11/octo-tentacle#readme"
+}
