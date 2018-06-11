@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"messaging"
-	"gpio"
+	"github.com/octo-tentacle/messaging"
+	"github.com/octo-tentacle/gpio"
 )
 
 func test(message string){

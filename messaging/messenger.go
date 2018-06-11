@@ -1,7 +1,7 @@
 package messaging
 
 import (
-	"messaging/nats"
+	"github.com/octo-tentacle/messaging/nats"
 )
 
 type Messenger interface {

@@ -32,7 +32,6 @@ func (nm natsMessenger) WriteToChannel(channel string, message string){
 }
 
 func (nm natsMessenger) SubscribeToChannel(channel string, onEvent func(channel string)){
-		// Simple Async Subscriber
 		nm.connection.Subscribe(channel, func(m *nats.Msg) {
 			onEvent(string(m.Data))
 		})
