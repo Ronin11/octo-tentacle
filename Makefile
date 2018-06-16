@@ -1,20 +1,24 @@
 include .env
 
-DOCKER=docker
+GO=go
 
 APP_NAME=octo-tentacle
 
 default: run
 
-# Create a build docker image
+# Create a build go image
 build:
-	$(DOCKER) build -t $(APP_NAME) .
+	$(GO) build -o $(APP_NAME) .
 
-# Remove built docker image
+# Remove built go image
 clean:
-	- $(DOCKER) rm -f $(APP_NAME)
+	rm -f $(APP_NAME)
 
-# After you build the image, check how it would run in production with this command
 run: build
-	$(DOCKER) run $(APP_NAME) $(NATS_SERVER)
+	./$(APP_NAME) -server=$(NATS_SERVER)
+
+test:
+	go test
+
+
 

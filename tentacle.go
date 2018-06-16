@@ -2,28 +2,28 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"flag"
 
-	"github.com/octo-tentacle/messaging"
-	"github.com/octo-tentacle/gpio"
+	"github.com/octo-tentacle/pkg/messaging"
+	"github.com/octo-tentacle/pkg/gpio"
+
+	"github.com/octo-tentacle/services"
 )
-
-func test(message string){
-	fmt.Printf("MESSAGE: %s\n", message)
-}
 
 func main() {
 	fmt.Println("Starting App")
-	serverAddress := os.Args[1]
-	messenger := messaging.GetNatsMessenger(serverAddress)
+	
+	server := flag.String("server", "http://127.0.0.1:4200", "NATS server address")
+	flag.Parse()
 
-	messenger.SubscribeToChannel("foo", test)
-	messenger.WriteToChannel("foo", "WOOO")
-
-	messenger2 := messaging.GetNatsMessenger(serverAddress)
-	messenger2.WriteToChannel("foo", "WOOO2")
+	messenger, err := messaging.GetNatsMessenger(*server)
+	if(err != nil){
+		panic(err)
+	}
 
 	gpio.Setup()
+
+	services.Start(messenger)
 
 	defer messenger.Close()
 	defer gpio.Cleanup()
