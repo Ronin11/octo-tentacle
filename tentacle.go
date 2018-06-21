@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"flag"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/octo-tentacle/pkg/messaging"
 	"github.com/octo-tentacle/pkg/gpio"
@@ -28,7 +31,7 @@ func main() {
 	defer messenger.Close()
 	defer gpio.Cleanup()
 
-	for{
-
-	}
+	exitSignal := make(chan os.Signal)
+	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)
+	<-exitSignal
 }
