@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	"github.com/octo-tentacle/pkg/messaging"
-	"github.com/octo-tentacle/pkg/gpio"
 
 	"github.com/octo-tentacle/services"
 )
@@ -24,12 +23,9 @@ func main() {
 		panic(err)
 	}
 
-	gpio.Setup()
-
 	services.Start(messenger)
 
 	defer messenger.Close()
-	defer gpio.Cleanup()
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)

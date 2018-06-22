@@ -5,6 +5,7 @@ import (
 )
 
 func Start(messenger messaging.Messenger){
-	startCounter(messenger)
+	startTempService(messenger)
+	// startCounter(messenger)
 	startCounterListener(messenger)
 }

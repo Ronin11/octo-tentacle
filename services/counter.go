@@ -33,9 +33,7 @@ func startCounter(messenger messaging.Messenger){
 				pin.Write(rpio.Low)
 			}
 			messenger.WriteToChannel("counter", fmt.Sprintf("State: %d", oof))
-			duration := time.Second
-  		time.Sleep(duration)
+  			time.Sleep(time.Second)
 		}
-
 	}()
 }
