@@ -32,12 +32,12 @@ func (nm natsMessenger) WriteToChannel(channel string, message string){
 	nm.connection.Publish(channel, []byte(message))
 }
 
-func (nm natsMessenger) SubscribeToChannel(channel string, onEvent func(channel string)){
+func (nm natsMessenger) SubscribeToChannel(channel string, onEvent func(message string)){
 		nm.connection.Subscribe(channel, func(m *nats.Msg) {
 			onEvent(string(m.Data))
 		})
 }
 
-func(nm natsMessenger) Close(){
+func(nm natsMessenger) Close(oof string){
 	nm.connection.Close()
 }

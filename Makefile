@@ -15,7 +15,8 @@ clean:
 	rm -f $(APP_NAME)
 
 run: build
-	./$(APP_NAME) -server=$(NATS_SERVER)
+	export SERVER=$(NATS_SERVER); \
+	./$(APP_NAME)
 
 test:
 	go test
