@@ -33,6 +33,9 @@ func createNatsListener(server string, callback func(message string, subject str
 	messenger.connection.Subscribe("*", func(m *nats.Msg) {
 		callback(string(m.Data), m.Subject)
 	})
+	messenger.connection.Subscribe("*.*", func(m *nats.Msg) {
+		callback(string(m.Data), m.Subject)
+	})
 	return err
 }
 

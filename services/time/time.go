@@ -12,7 +12,7 @@ func StartService(){
 	server := os.Getenv("SERVER")
 	messenger := messaging.CreateNatsMessenger("foo", server)
 	startTime(messenger)
-	messenger2 := messaging.CreateNatsMessenger("foo2", server)
+	messenger2 := messaging.CreateNatsMessenger("foo.two", server)
 	startTime(messenger2)
 }
 
