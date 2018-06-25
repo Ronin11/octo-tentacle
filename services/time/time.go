@@ -2,7 +2,6 @@ package time
 
 import (
 	"os"
-	"fmt"
 	"time"
 	"strconv"
 
@@ -13,7 +12,8 @@ func StartService(){
 	server := os.Getenv("SERVER")
 	messenger := messaging.CreateNatsMessenger("foo", server)
 	startTime(messenger)
-	startTimeListener(messenger)
+	messenger2 := messaging.CreateNatsMessenger("foo2", server)
+	startTime(messenger2)
 }
 
 func startTime(messenger messaging.Messenger){
@@ -26,8 +26,3 @@ func startTime(messenger messaging.Messenger){
 	}()
 }
 
-func startTimeListener(messenger messaging.Messenger){
-	messenger.Subscribe(func(message string){
-		fmt.Printf("TIME RECIEVED MESSAGE: %s\n", message)
-	})
-}

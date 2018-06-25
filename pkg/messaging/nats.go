@@ -1,4 +1,4 @@
-package nats
+package messaging
 
 import (
 	"sync"
@@ -13,7 +13,7 @@ type natsMessenger struct {
 var messengers = make(map[string]*natsMessenger)
 var once sync.Once
 
-func GetNatsMessenger(server string) (*natsMessenger, error){
+func getNatsMessenger(server string) (*natsMessenger, error){
 	if messengers[server] == nil {
 		var nc *nats.Conn
 		var err error
@@ -26,6 +26,14 @@ func GetNatsMessenger(server string) (*natsMessenger, error){
 		}
 	}
 	return messengers[server], nil
+}
+
+func createNatsListener(server string, callback func(message string, subject string)) error{
+	messenger, err := getNatsMessenger(server)
+	messenger.connection.Subscribe("*", func(m *nats.Msg) {
+		callback(string(m.Data), m.Subject)
+	})
+	return err
 }
 
 func (nm natsMessenger) WriteToChannel(channel string, message string){

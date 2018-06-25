@@ -1,10 +1,5 @@
 package messaging
 
-import (
-	"github.com/octo-tentacle/pkg/messaging/nats"
-)
-
-// type 
 
 type Messenger interface {
 	Write(message string)
@@ -16,6 +11,17 @@ type ChannelMessenger interface {
 	SubscribeToChannel(channel string, onEvent func(message string))
 	Close(oof string)
 }
+
+func CreateNatsMessenger(channel string, server string) Messenger {
+	return createChannelMessenger(channel, server, createNatsMessenger)
+}
+
+func CreateNatsListener(server string, callback func(message string, subject string)) error {
+	return createNatsListener(server, callback)
+}
+
+
+type newChannelMessenger func(server string) (ChannelMessenger, error)
 
 type channelMessenger struct {
 	channel string
@@ -32,10 +38,8 @@ func (c channelMessenger) Subscribe(onEvent func(message string)){
 	c.SubscribeToChannel(c.channel, onEvent)
 }
 
-type newChannelMessenger func(server string) (ChannelMessenger, error)
-
 func createNatsMessenger(server string) (ChannelMessenger, error){
-	return nats.GetNatsMessenger(server)
+	return getNatsMessenger(server)
 }
 
 func createChannelMessenger(channel string, server string, construction newChannelMessenger) Messenger{
@@ -50,10 +54,6 @@ func createChannelMessenger(channel string, server string, construction newChann
 		SubscribeToChannel: messenger.SubscribeToChannel,
 		Close: messenger.Close,
 	}
-}
-
-func CreateNatsMessenger(channel string, server string) Messenger {
-	return createChannelMessenger(channel, server, createNatsMessenger)
 }
 
 
