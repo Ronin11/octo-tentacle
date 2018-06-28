@@ -8,8 +8,15 @@ import (
 
 	"github.com/octo-tentacle/pkg/messaging"
 
-	"github.com/octo-tentacle/services"
+	// "github.com/octo-tentacle/services/counter"
+	"github.com/octo-tentacle/services/time"
 )
+
+func startServices(){
+	time.StartService()
+	// startCounter(messenger)
+	// startCounterListener(messenger)
+}
 
 func main() {
 	fmt.Println("Starting App")
@@ -22,7 +29,7 @@ func main() {
 		panic(err)
 	}
 
-	services.Start()
+	startServices()
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)
