@@ -19,7 +19,7 @@ func startServices(){
 }
 
 func main() {
-	fmt.Println("Starting App")
+	fmt.Println("\n~~~~~~~ Starting App ~~~~~~~")
 
 	server := os.Getenv("SERVER")
 	err := messaging.CreateNatsListener(server, func(message string, subject string) {
