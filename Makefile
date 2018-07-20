@@ -2,7 +2,7 @@ include .env
 
 GO=go
 
-APP_NAME=octo-tentacle
+APP_NAME=octo-mantle
 
 default: run
 

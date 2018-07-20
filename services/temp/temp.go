@@ -1,4 +1,4 @@
-package services
+package tempService
 
 import (
 	"fmt"
@@ -8,6 +8,10 @@ import (
 
 	"github.com/yryz/ds18b20"
 )
+
+// Start ...
+func Start(){
+}
 
 func startTempService(messenger messaging.Messenger) {
 	go func(){

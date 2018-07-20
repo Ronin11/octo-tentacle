@@ -4,7 +4,7 @@ package messaging
 //Publics
 type ChannelMessenger interface {
 	WriteToChannel(channel string, message string)
-	SubscribeToChannel(channel string, onEvent func(message string))
+	SubscribeToChannel(channel string, onEvent func(message string)) func() error
 	Close(oof string)
 }
 
@@ -21,8 +21,9 @@ type newChannelMessenger func(server string) (ChannelMessenger, error)
 
 type channelMessenger struct {
 	channel string
+	unsub func() error
 	WriteToChannel func(channel string, message string)
-	SubscribeToChannel func(channel string, onEvent func(message string))
+	SubscribeToChannel func(channel string, onEvent func(message string)) func() error
 	Close func(oof string)
 }
 
@@ -31,7 +32,13 @@ func (c channelMessenger) Write(message string){
 }
 
 func (c channelMessenger) Subscribe(onEvent func(message string)){
-	c.SubscribeToChannel(c.channel, onEvent)
+	c.unsub = c.SubscribeToChannel(c.channel, onEvent)
+}
+
+func (c channelMessenger) Unsubscribe(){
+	if(c.unsub != nil){
+		c.unsub()
+	}
 }
 
 func createNatsMessenger(server string) (ChannelMessenger, error){

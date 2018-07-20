@@ -9,6 +9,7 @@ import (
 type natsMessenger struct {
 	connection *nats.Conn
 }
+type unsub func() error
 
 var messengers = make(map[string]*natsMessenger)
 var once sync.Once
@@ -43,10 +44,11 @@ func (nm natsMessenger) WriteToChannel(channel string, message string){
 	nm.connection.Publish(channel, []byte(message))
 }
 
-func (nm natsMessenger) SubscribeToChannel(channel string, onEvent func(message string)){
-		nm.connection.Subscribe(channel, func(m *nats.Msg) {
+func (nm natsMessenger) SubscribeToChannel(channel string, onEvent func(message string)) func() error{
+		sub, _ := nm.connection.Subscribe(channel, func(m *nats.Msg) {
 			onEvent(string(m.Data))
 		})
+		return sub.Unsubscribe
 }
 
 func(nm natsMessenger) Close(oof string){
