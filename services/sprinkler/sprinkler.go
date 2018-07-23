@@ -10,12 +10,13 @@ import (
 	"github.com/octo-tentacle/pkg/octo"
 )
 
-type sprinklerData struct {
-	sprinklerStatus octo.Characteristics
+type sprinklerDatum struct {
+	sprinklerCharacteristic octo.Characteristics
+	sprinklerIsOn bool
 }
 
 const serviceChannel = "sprinkler"
-var data sprinklerData
+var data []sprinklerDatum
 
 
 // Start ...
@@ -24,11 +25,13 @@ func Start(){
 	if err != nil{
 		log.Fatal(err)
 	}
-	fmt.Println(config.Stream)
-	data = sprinklerData{
-		sprinklerStatus: octo.Characteristics{Read: true, Write: true},
-	}
-	// fmt.Println(data.time)
+	config.Notify = true
+	// fmt.Println(config.Stream)
+	data = append(data, sprinklerDatum{
+		sprinklerCharacteristic: octo.Characteristics{Read: true, Write: true},
+		sprinklerIsOn: false,
+	})
+	// fmt.Println(fmt.Sprintf("%+v", data))
 
 	server := os.Getenv("SERVER")
 	messenger := messaging.CreateNatsMessenger(serviceChannel, server)
@@ -41,7 +44,7 @@ func Start(){
 
 func startQueryListener(messenger messaging.Messenger){
 	messenger.Subscribe(func(message string){
-		fmt.Printf("QUERY MESSAGE: %s\n", message)
+		// fmt.Printf("QUERY MESSAGE: %s\n", message)
 		if(message == "?"){
 			messenger.Write(fmt.Sprintf("%+v", data))
 		}

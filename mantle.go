@@ -34,11 +34,14 @@ func main() {
 	startServices()
 
 
-	messenger := messaging.CreateNatsMessenger("foo.services", server)
+	messenger := messaging.CreateNatsMessenger("sprinkler.services", server)
 	go func(){
-		duration := time.Second * 10
+		duration := time.Second * 2
 		time.Sleep(duration)
 		messenger.Write("?")
+		messenger.Subscribe(func(msg string){
+			fmt.Println(msg)
+		})
 	}()
 
 	exitSignal := make(chan os.Signal)
