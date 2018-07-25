@@ -1,5 +1,6 @@
 {
   "permissions": false,
   "notify": true,
-  "stream": "streamfast"
+  "dataLevel": 5,
+  "triggers": []
 }

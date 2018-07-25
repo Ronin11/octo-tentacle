@@ -24,21 +24,23 @@ func main() {
 	fmt.Println("\n~~~~~~~ Starting App ~~~~~~~")
 
 	server := os.Getenv("SERVER")
-	// err := messaging.CreateNatsListener(server, func(message string, subject string) {
-	// 	fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
-	// })
-	// if err != nil{
-	// 	panic(err)
-	// }
+	err := messaging.CreateNatsListener(server, func(message string, subject string) {
+		fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
+	})
+	if err != nil{
+		panic(err)
+	}
 
 	startServices()
 
 
-	messenger := messaging.CreateNatsMessenger("foo.services", server)
+	messenger := messaging.CreateNatsMessenger("discovery", server)
 	go func(){
-		duration := time.Second * 10
+		duration := time.Second * 5
 		time.Sleep(duration)
-		messenger.Write("?")
+		messenger.WriteAndListen("?", func(msg string){
+			fmt.Println("asdf: ", msg)
+		})
 	}()
 
 	exitSignal := make(chan os.Signal)

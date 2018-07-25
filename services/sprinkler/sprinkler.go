@@ -2,7 +2,7 @@ package sprinklerService
 
 import (
 	"log"
-	"os"
+	// "os"
 	"fmt"
 	"time"
 
@@ -14,7 +14,6 @@ type sprinklerData struct {
 	sprinklerStatus octo.Characteristics
 }
 
-const serviceChannel = "sprinkler"
 var data sprinklerData
 
 
@@ -24,41 +23,31 @@ func Start(){
 	if err != nil{
 		log.Fatal(err)
 	}
-	fmt.Println(config.Stream)
+	fmt.Println(config.Triggers)
 	data = sprinklerData{
 		sprinklerStatus: octo.Characteristics{Read: true, Write: true},
 	}
-	// fmt.Println(data.time)
 
-	server := os.Getenv("SERVER")
-	messenger := messaging.CreateNatsMessenger(serviceChannel, server)
-	startWriter(messenger)
-	startListener(messenger)
+	// server := os.Getenv("SERVER")
+	octo.CreateService(data)
 
-	queryMessenger := messaging.CreateNatsMessenger(fmt.Sprintf("%s.services", serviceChannel), server)
-	startQueryListener(queryMessenger)
+	// for _, channel := range config.OutputChannels {
+	// 	messenger := messaging.CreateNatsMessenger(channel, server)
+	// 	startWriter(messenger)
+	// }
 }
 
-func startQueryListener(messenger messaging.Messenger){
-	messenger.Subscribe(func(message string){
-		fmt.Printf("QUERY MESSAGE: %s\n", message)
-		if(message == "?"){
-			messenger.Write(fmt.Sprintf("%+v", data))
-		}
-	})
-}
-
-func startListener(messenger messaging.Messenger){
-	messenger.Subscribe(func(message string){
-		fmt.Printf("LISTENER MESSAGE: %s\n", message)
-	})
-}
+// func startListener(messenger messaging.Messenger){
+// 	messenger.Subscribe(func(message string){
+// 		fmt.Printf("LISTENER MESSAGE: %s\n", message)
+// 	})
+// }
 
 
 func startWriter(messenger messaging.Messenger){
 	go func(){
 		for i := 0; true; i++ {
-			// messenger.Write(strconv.Itoa(i))
+			messenger.Write("Sprinkler")
 			duration := time.Second
   		time.Sleep(duration)
 		}

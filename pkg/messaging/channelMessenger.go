@@ -31,6 +31,14 @@ func (c channelMessenger) Write(message string){
 	c.WriteToChannel(c.channel, message)
 }
 
+func (c channelMessenger) WriteAndListen(message string, onEvent func(message string)){
+	c.WriteToChannel(c.channel, message)
+	c.unsub = c.SubscribeToChannel(c.channel, func(msg string){
+		onEvent(msg)
+		c.unsub()
+	})
+}
+
 func (c channelMessenger) Subscribe(onEvent func(message string)){
 	c.unsub = c.SubscribeToChannel(c.channel, onEvent)
 }

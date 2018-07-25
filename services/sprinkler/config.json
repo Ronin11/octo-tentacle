@@ -1,5 +1,18 @@
 {
   "permissions": false,
   "notify": true,
-  "stream": "streamfast"
+  "dataLevel": 5,
+  "outputChannels": [
+    "sprinkler"
+  ],
+  "triggers": [
+    {
+      "channel": "channel.channel",
+      "logic": "asdf"
+    },
+    {
+      "channel": "channel.channel2",
+      "logic": "asdf2"
+    }
+  ]
 }
