@@ -11,9 +11,11 @@ import (
 )
 
 type sprinklerData struct {
-	sprinklerStatus octo.Characteristics
+	sprinklerCharacteristic octo.Characteristics
+	sprinklerIsOn bool
 }
 
+const serviceChannel = "sprinkler"
 var data sprinklerData
 
 
@@ -24,9 +26,7 @@ func Start(){
 		log.Fatal(err)
 	}
 	fmt.Println(config.Triggers)
-	data = sprinklerData{
-		sprinklerStatus: octo.Characteristics{Read: true, Write: true},
-	}
+	// fmt.Println(fmt.Sprintf("%+v", data))
 
 	// server := os.Getenv("SERVER")
 	octo.CreateService(data)
