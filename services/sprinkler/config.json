@@ -1,18 +1,24 @@
 {
-  "permissions": false,
-  "notify": true,
-  "dataLevel": 5,
   "outputChannels": [
-    "sprinkler"
+    {
+      "name": "sprinkler",
+      "verbosity": 5
+    }
   ],
   "triggers": [
     {
       "channel": "channel.channel",
-      "logic": "asdf"
+      "logic": "asdf",
+      "action": {
+        "name": "OOF"
+      }
     },
     {
       "channel": "channel.channel2",
-      "logic": "asdf2"
+      "logic": "asdf2",
+      "action": {
+        "name": "OOF"
+      }
     }
   ]
 }

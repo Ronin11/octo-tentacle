@@ -1,56 +1,45 @@
 package sprinklerService
 
 import (
+	// "time"
 	"log"
-	// "os"
-	"fmt"
-	"time"
 
-	"github.com/octo-tentacle/pkg/messaging"
 	"github.com/octo-tentacle/pkg/octo"
 )
 
 type sprinklerData struct {
-	sprinklerCharacteristic octo.Characteristics
+	serviceCharacteristic octo.Characteristics
 	sprinklerIsOn bool
 }
 
-const serviceChannel = "sprinkler"
 var data sprinklerData
 
-
-// Start ...
-func Start(){
+// CreateService ...
+func CreateService() *octo.Service{
 	config, err := octo.ReadConfigFile("./services/sprinkler/config.json")
 	if err != nil{
 		log.Fatal(err)
 	}
-	fmt.Println(config.Triggers)
-	// fmt.Println(fmt.Sprintf("%+v", data))
+	data.serviceCharacteristic = octo.Characteristics{
+		Read: true,
+		Write: true,
+	}
+	
+	// octo.CreateService(network, config, &data)
+	
+	// go serviceLogic(config)
+	return struct {
+		onMessage func(string)
+	}
+}
 
-	// server := os.Getenv("SERVER")
-	octo.CreateService(data)
-
-	// for _, channel := range config.OutputChannels {
-	// 	messenger := messaging.CreateNatsMessenger(channel, server)
-	// 	startWriter(messenger)
+func serviceLogic(config *octo.Config){
+	// for{
+	// 	data.sprinklerIsOn = !data.sprinklerIsOn
+	// 	time.Sleep(time.Second * 5)
 	// }
 }
 
-// func startListener(messenger messaging.Messenger){
-// 	messenger.Subscribe(func(message string){
-// 		fmt.Printf("LISTENER MESSAGE: %s\n", message)
-// 	})
-// }
+func onMessage(message string){
 
-
-func startWriter(messenger messaging.Messenger){
-	go func(){
-		for i := 0; true; i++ {
-			messenger.Write("Sprinkler")
-			duration := time.Second
-  		time.Sleep(duration)
-		}
-	}()
 }
-
