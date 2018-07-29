@@ -6,6 +6,8 @@ import (
 	"fmt"
 
 	"github.com/octo-tentacle/pkg/octo"
+
+	"github.com/Ronin11/go-rpio"
 )
 
 type sprinklerService struct {
@@ -73,11 +75,35 @@ func startServiceWriter(messenger octo.Messenger){
 	}()
 }
 
-func serviceLogic(config *octo.Config){
+func serviceLogic(messenger octo.Messenger){
 	// for{
 	// 	data.sprinklerIsOn = !data.sprinklerIsOn
 	// 	time.Sleep(time.Second * 5)
 	// }
+	const pin = rpio.Pin(18)
+	go func(){
+		// Open and map memory to access gpio, check for errors
+		if err := rpio.Open(); err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+		}
+ 		// Set pin to output mode
+		pin.Output()
+		// Unmap gpio memory when done
+		defer rpio.Close()
+ 		for i := 0; true; i++ {
+			messenger.Write(fmt.Sprintf("%+v", service.data))
+			oof := i%2
+			if(oof > 0){
+				pin.Write(rpio.High)
+			}else{
+				pin.Write(rpio.Low)
+			}
+			messenger.Write(fmt.Sprintf("%+v", service.data))
+			duration := time.Second
+  			time.Sleep(duration)
+		}
+ 	}()
 }
 
 // func (s sprinklerService) Init(){
