@@ -1,4 +1,4 @@
-package messaging
+package octo
 
 
 //Publics
@@ -8,8 +8,13 @@ type ChannelMessenger interface {
 	Close(oof string)
 }
 
-func CreateNatsMessenger(channel string, server string) Messenger {
-	return createChannelMessenger(channel, server, createNatsMessenger)
+func CreateMessenger(channel string, network *Network) Messenger {
+	switch networkType := network.GetNetworkType(); networkType {
+		case NATSNetwork:
+			return createChannelMessenger(channel, network.GetServerAddress(), createNatsMessenger)
+		default:
+			return nil
+	}
 }
 
 func CreateNatsListener(server string, callback func(message string, subject string)) error {

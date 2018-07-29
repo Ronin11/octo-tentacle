@@ -4,13 +4,13 @@ package octo
 import (
 	"fmt"
 	"time"
-
-	"github.com/octo-tentacle/pkg/messaging"
 )
 
 // Service ...
 type Service interface{
-	onMessage(message string)
+	// Init()
+	// OnMessage(message string)
+	// DiscoveryMessage() string
 }
 
 // Characteristics ...
@@ -20,19 +20,12 @@ type Characteristics struct {
 }
 
 // CreateService ...
-func CreateService(network *Network, config *Config, data interface{}){
+func CreateService(network *Network){
 	server := network.GetServerAddress()
-
-	for _, channel := range config.OutputChannels {
-		messenger := messaging.CreateNatsMessenger(channel.Name, server)
-		startServiceWriter(messenger, data)
-	}
-
-	discoveryMessenger := messaging.CreateNatsMessenger("discovery", server)
-	startServiceDiscoveryListener(discoveryMessenger, data)
+	fmt.Println(server)
 }
 
-func startServiceDiscoveryListener(messenger messaging.Messenger, data interface{}){
+func startServiceDiscoveryListener(messenger Messenger, data interface{}){
 	messenger.Subscribe(func(message string){
 		if(message == "?"){
 			messenger.Write(fmt.Sprintf("%+v", data))
@@ -40,13 +33,13 @@ func startServiceDiscoveryListener(messenger messaging.Messenger, data interface
 	})
 }
 
-func startServiceListener(messenger messaging.Messenger){
+func startServiceListener(messenger Messenger){
 	messenger.Subscribe(func(message string){
-		fmt.Printf("LISTENER MESSAGE: %s\n", message)
+		// OnMessage(message)
 	})
 }
 
-func startServiceWriter(messenger messaging.Messenger, data interface{}){
+func startServiceWriter(messenger Messenger, data interface{}){
 	go func(){
 		for i := 0; true; i++ {
 			messenger.Write(fmt.Sprintf("%+v", data))

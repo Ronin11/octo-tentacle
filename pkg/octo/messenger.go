@@ -1,5 +1,4 @@
-package messaging
-
+package octo
 
 type Messenger interface {
 	Write(message string)
