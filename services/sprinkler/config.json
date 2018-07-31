@@ -1,7 +1,12 @@
 {
+  "service": "sprinkler",
+  "group": "backyard",
+  "inputChannels": [
+    "input"
+  ],
   "outputChannels": [
     {
-      "name": "sprinkler",
+      "name": "output",
       "verbosity": 5
     }
   ],
