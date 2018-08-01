@@ -1,5 +1,6 @@
 package octo
 
+// NetworkType ...
 type NetworkType int
 
 const (
@@ -7,7 +8,7 @@ const (
 	MQTTNetwork
 )
 
-//Network ...
+// Network ...
 type Network struct {
 	networkType NetworkType
 	server string
@@ -21,17 +22,18 @@ func JoinNetwork(serverAddress string, networkType NetworkType) *Network{
 	}
 }
 
-//GetServerAddress ...
+// GetServerAddress ...
 func (n Network) GetServerAddress() string{
 	return n.server
 }
 
-//GetNetworkType ...
+// GetNetworkType ...
 func (n Network) GetNetworkType() NetworkType{
 	return n.networkType
 }
 
+// AddService ...
 func (n Network) AddService(service Service) error{
-	// CreateService(&n)
+	service.AddToNetwork(&n)
 	return nil
 }
