@@ -19,11 +19,9 @@ type sprinklerData struct {
 	SprinklerIsOn bool `json:"sprinklerIsOn"`
 }
 
-var service sprinklerService
-
 // CreateService ...
 func CreateService() octo.Service{
-	service = sprinklerService{
+	service := sprinklerService{
 		serviceCharacteristic: octo.Characteristics{
 			Read: true,
 			Write: true,
@@ -34,7 +32,6 @@ func CreateService() octo.Service{
 		},
 		config: octo.ReadConfigFile("./services/sprinkler/config.json"),
 	}
-	
 	
 	go serviceLogic(&service)
 	return &service

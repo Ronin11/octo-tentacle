@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 	"os/signal"
 	"syscall"
 
@@ -27,20 +26,20 @@ func main() {
 	network.AddService(sprinklerService.CreateService())
 
 
-	messenger := octo.CreateMessenger("discovery", network)
-	go func(){
-		duration := time.Second
-		time.Sleep(duration)
-		var services []string
-		messenger.Subscribe(func(message string){
-			if message != "?" {
-				services = append(services, message)
-			}
-		})
-		messenger.Write("?")
-		time.Sleep(duration * 5)
-		fmt.Println("Available Services: ", services)
-	}()
+	// messenger := octo.CreateMessenger("discovery", network)
+	// go func(){
+	// 	duration := time.Second
+	// 	time.Sleep(duration)
+	// 	var services []string
+	// 	messenger.Subscribe(func(message string){
+	// 		if message != "?" {
+	// 			services = append(services, message)
+	// 		}
+	// 	})
+	// 	messenger.Write("?")
+	// 	time.Sleep(duration * 5)
+	// 	fmt.Println("Available Services: ", services)
+	// }()
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)
