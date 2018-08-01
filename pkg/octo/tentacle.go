@@ -23,11 +23,13 @@ type Trigger struct {
 type OutputChannel struct {
 	Name string `json:"name"`
 	Verbosity int `json:"verbosity"`
-	
 }
 
 // Config file struct which contains a bunch of updateable info for the services
 type Config struct {
+	Service string `json:"service"`
+	Group string `json:"group"`
+	InputChannels []string `json:"inputChannels"`
 	OutputChannels []OutputChannel `json:"outputChannels"`
 	Triggers []Trigger `json:"triggers"`
 }

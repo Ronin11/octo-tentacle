@@ -31,10 +31,7 @@ func getNatsMessenger(server string) (*natsMessenger, error){
 
 func createNatsListener(server string, callback func(message string, subject string)) error{
 	messenger, err := getNatsMessenger(server)
-	messenger.connection.Subscribe("*", func(m *nats.Msg) {
-		callback(string(m.Data), m.Subject)
-	})
-	messenger.connection.Subscribe("*.*", func(m *nats.Msg) {
+	messenger.connection.Subscribe("*.>", func(m *nats.Msg) {
 		callback(string(m.Data), m.Subject)
 	})
 	return err
