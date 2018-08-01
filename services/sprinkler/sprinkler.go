@@ -25,7 +25,7 @@ var service sprinklerService
 
 // CreateService ...
 func CreateService(network *octo.Network) octo.Service{
-	const configFile := "./services/sprinkler/config.json"
+	const configFile = "./services/sprinkler/config.json"
 	service = sprinklerService{
 		serviceCharacteristic: octo.Characteristics{
 			Read: true,
@@ -98,18 +98,7 @@ func CreateService(network *octo.Network) octo.Service{
 		}
 	})
 	discoveryMessenger := octo.CreateMessenger("discovery", network)
-<<<<<<< HEAD
-	startServiceDiscoveryListener(discoveryMessenger)
-	
-	go serviceLogic(config)
-	return &service
-}
-
-func startServiceDiscoveryListener(messenger octo.Messenger){
-	messenger.Subscribe(func(message string){
-=======
 	discoveryMessenger.Subscribe(func(message string){
->>>>>>> 68c591a45f5828850e5b88b9bb84090c47b7af45
 		if(message == "?"){
 			discoveryMessenger.Write(
 				fmt.Sprintf("%s.%s.%d:%+v", config.Service, config.Group, id, service.data),
@@ -117,7 +106,7 @@ func startServiceDiscoveryListener(messenger octo.Messenger){
 		}
 	})
 	
-	// go serviceLogic(config)
+	go serviceLogic()
 	return &service
 }
 
@@ -154,7 +143,7 @@ func OnMessage(message string) string{
 	return okMessage
 }
 
-func serviceLogic(messenger octo.Messenger){
+func serviceLogic(){
 	// for{
 	// 	data.sprinklerIsOn = !data.sprinklerIsOn
 	// 	time.Sleep(time.Second * 5)

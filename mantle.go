@@ -24,11 +24,7 @@ func main() {
 	}
 
 	sprinklerService.CreateService(network)
-	sprinklerService.CreateService(network)
-	sprinklerService.CreateService(network)
-	sprinklerService.CreateService(network)
-	sprinklerService.CreateService(network)
-	sprinklerService.CreateService(network)
+	// network.AddService(sprinklerService.CreateService())
 
 
 	messenger := octo.CreateMessenger("discovery", network)
