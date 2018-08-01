@@ -4,7 +4,7 @@ package octo
 type NetworkType int
 
 const (
-	NATSNetwork NetworkType = 1 + iota
+	NATSNetwork NetworkType = iota
 	MQTTNetwork
 )
 

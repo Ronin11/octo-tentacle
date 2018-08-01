@@ -22,6 +22,7 @@ func main() {
 		panic(err)
 	}
 
+<<<<<<< HEAD
 	network.AddService(sprinklerService.CreateService())
 	network.AddService(sprinklerService.CreateService())
 
@@ -40,6 +41,26 @@ func main() {
 	// 	time.Sleep(duration * 5)
 	// 	fmt.Println("Available Services: ", services)
 	// }()
+=======
+	sprinklerService.CreateService(network)
+	// network.AddService(sprinklerService.CreateService())
+
+
+	messenger := octo.CreateMessenger("discovery", network)
+	go func(){
+		duration := time.Second
+		time.Sleep(duration)
+		var services []string
+		messenger.Subscribe(func(message string){
+			if message != "?" {
+				services = append(services, message)
+			}
+		})
+		messenger.Write("?")
+		time.Sleep(duration * 5)
+		fmt.Println("Available Services: ", services)
+	}()
+>>>>>>> c88f76d486189efc1e91d593620280635cfd8e50
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)

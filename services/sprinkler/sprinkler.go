@@ -4,8 +4,7 @@ import (
 	"time"
 
 	"github.com/octo-tentacle/pkg/octo"
-
-	// "github.com/Ronin11/go-rpio"
+	"github.com/octo-tentacle/pkg/rwi"
 )
 
 type sprinklerService struct {
@@ -60,42 +59,22 @@ func (service *sprinklerService) AddToNetwork(network *octo.Network){
 	octo.CreateServiceListeners(service, network)
 }
 
-// func OnMessage(message string) string{
-// 	var temp sprinklerData
-// 	err := json.Unmarshal([]byte(message), &temp)
-// 	if err != nil {
-// 		return err.Error()
-// 	}
-// 	service.data = temp
-// 	return "okMessage"
-// }
-
 func serviceLogic(service *sprinklerService){
 	for{
 		service.data.SprinklerIsOn = !service.data.SprinklerIsOn
 		time.Sleep(time.Second)
 	}
-
-	// const pin = rpio.Pin(18)
+	
 	// go func(){
-	// 	// Open and map memory to access gpio, check for errors
-	// 	if err := rpio.Open(); err != nil {
-	// 			fmt.Println(err)
-	// 			os.Exit(1)
-	// 	}
- 	// 	// Set pin to output mode
-	// 	pin.Output()
-	// 	// Unmap gpio memory when done
-	// 	defer rpio.Close()
- 	// 	for i := 0; true; i++ {
-	// 		messenger.Write(fmt.Sprintf("%+v", service.data))
-	// 		oof := i%2
-	// 		if(oof > 0){
-	// 			pin.Write(rpio.High)
+	// 	rwi.Setup()
+	// 	pin := rwi.OutputPin(18)
+	// 	defer rwi.Close()
+ 	// 	for{
+	// 		if service.data.SprinklerIsOn {
+	// 			pin.Write(rwi.High)
 	// 		}else{
-	// 			pin.Write(rpio.Low)
+	// 			pin.Write(rwi.Low)
 	// 		}
-	// 		messenger.Write(fmt.Sprintf("%+v", service.data))
 	// 		duration := time.Second
   // 			time.Sleep(duration)
 	// 	}
