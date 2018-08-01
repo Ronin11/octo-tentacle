@@ -65,18 +65,18 @@ func serviceLogic(service *sprinklerService){
 		time.Sleep(time.Second)
 	}
 	
-	// go func(){
-	// 	rwi.Setup()
-	// 	pin := rwi.OutputPin(18)
-	// 	defer rwi.Close()
- 	// 	for{
-	// 		if service.data.SprinklerIsOn {
-	// 			pin.Write(rwi.High)
-	// 		}else{
-	// 			pin.Write(rwi.Low)
-	// 		}
-	// 		duration := time.Second
-  // 			time.Sleep(duration)
-	// 	}
- 	// }()
+	go func(){
+		rwi.Setup()
+		pin := rwi.OutputPin(18)
+		defer rwi.Close()
+ 		for{
+			if service.data.SprinklerIsOn {
+				pin.Write(rwi.High)
+			}else{
+				pin.Write(rwi.Low)
+			}
+			duration := time.Second
+  			time.Sleep(duration)
+		}
+ 	}()
 }
