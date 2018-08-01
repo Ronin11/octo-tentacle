@@ -24,6 +24,7 @@ var service sprinklerService
 
 // CreateService ...
 func CreateService(network *octo.Network) octo.Service{
+	const configFile := "./services/sprinkler/config.json"
 	service = sprinklerService{
 		serviceCharacteristic: octo.Characteristics{
 			Read: true,
@@ -34,7 +35,7 @@ func CreateService(network *octo.Network) octo.Service{
 		},
 	}
 
-	config, err := octo.ReadConfigFile("./services/sprinkler/config.json")
+	config, err := octo.ReadConfigFile(configFile)
 	if err != nil{
 		log.Fatal(err)
 	}
@@ -47,7 +48,7 @@ func CreateService(network *octo.Network) octo.Service{
 	discoveryMessenger := octo.CreateMessenger("discovery", network)
 	startServiceDiscoveryListener(discoveryMessenger)
 	
-	// go serviceLogic(config)
+	go serviceLogic(config)
 	return &service
 }
 
