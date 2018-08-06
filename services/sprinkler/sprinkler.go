@@ -8,6 +8,8 @@ import (
 
 	"github.com/octo-tentacle/pkg/octo"
 	"github.com/octo-tentacle/pkg/rwi"
+
+	// "github.com/Ronin11/go-rpio"
 )
 
 type sprinklerService struct {
@@ -143,18 +145,18 @@ func OnMessage(message string) string{
 }
 
 func serviceLogic(){
-	for{
-		service.data.SprinklerIsOn = !service.data.SprinklerIsOn
-		time.Sleep(time.Second * 5)
-	}
-
-	// const pin = rpio.Pin(18)
+	go func(){
+		for{
+			service.data.SprinklerIsOn = !service.data.SprinklerIsOn
+			time.Sleep(time.Second * 2)
+		}
+	}()
 	
 	go func(){
 		rwi.Setup()
-		pin := rwi.OutputPin(18)
+		pin := rwi.OutputPin(12)
 		defer rwi.Close()
- 		for{
+ 		for {
 			if service.data.SprinklerIsOn {
 				pin.Write(rwi.High)
 			}else{
