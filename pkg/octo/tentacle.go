@@ -9,6 +9,7 @@ import (
 // Action ...
 type Action struct {
 	Name string `json:"name"`
+	OnDone *Action `json:"onDone"`
 }
 
 // Trigger ...

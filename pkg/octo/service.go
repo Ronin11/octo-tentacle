@@ -15,6 +15,7 @@ type Service interface {
 	GetConfig() *Config
 	GetID() int
 	SetID(int)
+	OnMessage(string)
 }
 
 // Characteristics ...
@@ -43,7 +44,7 @@ func SetServiceId(service Service, network *Network) {
 	service.SetID(id)
 }
 
-func CreateServicWriters(service Service, network *Network){
+func CreateServiceWriters(service Service, network *Network){
 	for _, channel := range service.GetConfig().OutputChannels {
 		messenger := CreateMessenger(
 			fmt.Sprintf("%s.%s.%d.%s", 
@@ -78,15 +79,8 @@ func CreateServiceListeners(service Service, network *Network){
 			network,
 		)
 		messenger.Subscribe(func(message string){
-			//TODO MAKE THIS NOT BAD
-			fmt.Println(
-				fmt.Sprintf("%s.%s.%d.%s: %s", 
-					service.GetConfig().Service, service.GetConfig().Group, 
-					service.GetID(), channelName, message,
-				),
-			)
 			// if message != okMessage {
-			// 	messenger.Write(OnMessage(message))
+				service.OnMessage(message)
 			// }
 		})
 	}

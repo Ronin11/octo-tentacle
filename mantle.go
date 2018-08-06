@@ -1,6 +1,7 @@
 package main
 
 import (
+	"time"
 	"fmt"
 	"os"
 	"os/signal"
@@ -21,25 +22,18 @@ func main() {
 	if err != nil{
 		panic(err)
 	}
+	config := octo.ReadConfigFile("./services/sprinkler/config.json")
+	network.AddService(sprinklerService.CreateService(config))
+	network.AddService(sprinklerService.CreateService(config))
 
-	network.AddService(sprinklerService.CreateService())
-	network.AddService(sprinklerService.CreateService())
 
-
-	// messenger := octo.CreateMessenger("discovery", network)
-	// go func(){
-	// 	duration := time.Second
-	// 	time.Sleep(duration)
-	// 	var services []string
-	// 	messenger.Subscribe(func(message string){
-	// 		if message != "?" {
-	// 			services = append(services, message)
-	// 		}
-	// 	})
-	// 	messenger.Write("?")
-	// 	time.Sleep(duration * 5)
-	// 	fmt.Println("Available Services: ", services)
-	// }()
+	messenger := octo.CreateMessenger("sprinkler.backyard.1.input", network)
+	duration := time.Second
+	time.Sleep(duration)
+	messenger.Write(`{"Name":"Action Description","State":{"sprinklerIsOn": true,"Duration":"SomeDuration"},"onDone":{"name": "ON DONE"}}`)
+	messenger.Subscribe(func(message string){
+		fmt.Println("RESPONSE: ", message)
+	})
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)

@@ -15,7 +15,10 @@
       "channel": "channel.channel",
       "logic": "asdf",
       "action": {
-        "name": "OOF"
+        "name": "OOF",
+        "onDone": {
+          "name": "ON DONE"
+        }
       }
     },
     {

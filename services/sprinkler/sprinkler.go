@@ -2,11 +2,10 @@ package sprinklerService
 
 import (
 	"time"
+	"encoding/json"
 
 	"github.com/octo-tentacle/pkg/octo"
 	"github.com/octo-tentacle/pkg/rwi"
-
-	// "github.com/Ronin11/go-rpio"
 )
 
 type sprinklerService struct {
@@ -18,10 +17,11 @@ type sprinklerService struct {
 
 type sprinklerData struct {
 	SprinklerIsOn bool `json:"sprinklerIsOn"`
+	Duration string `json:"duration"`
 }
 
 // CreateService ...
-func CreateService() octo.Service{
+func CreateService(config *octo.Config) octo.Service{
 	service := sprinklerService{
 		serviceCharacteristic: octo.Characteristics{
 			Read: true,
@@ -31,7 +31,7 @@ func CreateService() octo.Service{
 		data: sprinklerData{
 			SprinklerIsOn: false,
 		},
-		config: octo.ReadConfigFile("./services/sprinkler/config.json"),
+		config: config,
 	}
 	
 	go serviceLogic(&service)
@@ -54,20 +54,26 @@ func (service *sprinklerService) SetID(newID int){
 	service.id = newID
 }
 
+func (service *sprinklerService) OnMessage(message string){
+	var action sprinklerAction
+	json.Unmarshal([]byte(message), &action)
+	service.data = action.State
+}
+
 func (service *sprinklerService) AddToNetwork(network *octo.Network){
 	octo.SetServiceId(service, network)
 	octo.CreateDiscoveryListeners(service, network)
-	octo.CreateServicWriters(service, network)
+	octo.CreateServiceWriters(service, network)
 	octo.CreateServiceListeners(service, network)
 }
 
 func serviceLogic(service *sprinklerService){
-	go func(){
-		for{
-			service.data.SprinklerIsOn = !service.data.SprinklerIsOn
-			time.Sleep(time.Second * 2)
-		}
-	}()
+	// go func(){
+	// 	for{
+	// 		service.data.SprinklerIsOn = !service.data.SprinklerIsOn
+	// 		time.Sleep(time.Second * 2)
+	// 	}
+	// }()
 	
 	go func(){
 		rwi.Setup()
