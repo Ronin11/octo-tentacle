@@ -1,6 +1,7 @@
 package octo
 
 import (
+	"log"
 	"encoding/json"
 	"io/ioutil"
 )
@@ -35,13 +36,13 @@ type Config struct {
 }
 
 // ReadConfigFile ...
-func ReadConfigFile(filename string) (*Config, error){
+func ReadConfigFile(filename string) (*Config){
 	file, e := ioutil.ReadFile(filename)
 	if e != nil {
-			return nil, e
+			log.Fatal(e)
 	}
 
 	var config Config
 	json.Unmarshal(file, &config)
-	return &config, nil
+	return &config
 }
