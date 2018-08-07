@@ -24,10 +24,10 @@ func main() {
 	}
 	config := octo.ReadConfigFile("./services/sprinkler/config.json")
 	network.AddService(sprinklerService.CreateService(config))
-	network.AddService(sprinklerService.CreateService(config))
+	// network.AddService(sprinklerService.CreateService(config))
 
 
-	messenger := octo.CreateMessenger("sprinkler.backyard.1.input", network)
+	messenger := octo.CreateMessenger("sprinkler.backyard.0.input", network)
 	duration := time.Second
 	time.Sleep(duration)
 	messenger.Write(`{"Name":"Action Description","State":{"sprinklerIsOn": true,"Duration":"SomeDuration"},"onDone":{"name": "ON DONE"}}`)

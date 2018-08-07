@@ -1,11 +1,14 @@
 package sprinklerService
 
 import (
+	"log"
 	"time"
 	"encoding/json"
 
 	"github.com/octo-tentacle/pkg/octo"
-	"github.com/octo-tentacle/pkg/rwi"
+	// "github.com/octo-tentacle/pkg/rwi"
+
+	"github.com/Ronin11/go-rpio"
 )
 
 type sprinklerService struct {
@@ -68,22 +71,39 @@ func (service *sprinklerService) AddToNetwork(network *octo.Network){
 }
 
 func serviceLogic(service *sprinklerService){
-	// go func(){
-	// 	for{
-	// 		service.data.SprinklerIsOn = !service.data.SprinklerIsOn
-	// 		time.Sleep(time.Second * 2)
-	// 	}
-	// }()
+	go func(){
+		for{
+			service.data.SprinklerIsOn = !service.data.SprinklerIsOn
+			time.Sleep(time.Second * 2)
+		}
+	}()
 	
 	go func(){
-		rwi.Setup()
-		pin := rwi.OutputPin(12)
-		defer rwi.Close()
+		// rwi.Setup()
+		// pin := rwi.OutputPin(18)
+		// defer rwi.Close()
+		pin := rpio.Pin(4)
+		pin2 := rpio.Pin(24)
+		if err := rpio.Open(); err != nil {
+			log.Fatal(err)
+		}
+	
+		// Unmap gpio memory when done
+		defer rpio.Close()
+	
+		// Set pin to output mode
+		pin.Output()
+		pin2.Output()
+
  		for {
 			if service.data.SprinklerIsOn {
-				pin.Write(rwi.High)
+				pin.Write(rpio.High)
+				pin2.Write(rpio.High)
+				// pin.Write(rwi.High)
 			}else{
-				pin.Write(rwi.Low)
+				pin.Write(rpio.Low)
+				pin2.Write(rpio.Low)
+				// pin.Write(rwi.Low)
 			}
 			duration := time.Second
   			time.Sleep(duration)
