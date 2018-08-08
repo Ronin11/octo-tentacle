@@ -18,6 +18,13 @@ type Service interface {
 	OnMessage(string)
 }
 
+// Data ...
+type Data struct {
+	//If service goes offline, it can keep tracking data and 
+	// then dump to stream. Dont use the bus timestamp
+	TimeStamp uint32
+}
+
 // Characteristics ...
 type Characteristics struct {
 	Read bool `json:"read"`

@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/octo-tentacle/pkg/octo"
+	"github.com/octo-tentacle/pkg/rwi"
 
 	"github.com/octo-tentacle/services/sprinkler"
 )
@@ -22,8 +23,14 @@ func main() {
 	if err != nil{
 		panic(err)
 	}
-	config := octo.ReadConfigFile("./services/sprinkler/config.json")
-	network.AddService(sprinklerService.CreateService(config))
+
+	rwi.Setup()
+	sprinklerPin1 := rwi.OutputPin(24)
+	defer rwi.Close()
+
+	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")
+
+	network.AddService(sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1))
 	// network.AddService(sprinklerService.CreateService(config))
 
 
