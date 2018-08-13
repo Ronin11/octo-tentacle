@@ -1,24 +1,47 @@
 package octo
 
+import (
+	"log"
+)
 
-//Publics
+
+/*~~~~~~ Publics ~~~~~~*/
+
+// ChannelMessenger ...
 type ChannelMessenger interface {
 	WriteToChannel(channel string, message string)
 	SubscribeToChannel(channel string, onEvent func(message string)) func() error
 	Close(oof string)
 }
 
+// CreateMessenger ...
 func CreateMessenger(channel string, network *Network) Messenger {
 	switch networkType := network.GetNetworkType(); networkType {
 		case NATSNetwork:
-			return createChannelMessenger(channel, network.GetServerAddress(), createNatsMessenger)
+			connection, err := getNatsMessenger(network.GetServerAddress())
+			if err != nil {
+				log.Fatal("CreateMessenger: ", err)
+			}
+			
+			return channelMessenger{
+				channel: channel,
+				WriteToChannel: connection.WriteToChannel,
+				SubscribeToChannel: connection.SubscribeToChannel,
+				Close: connection.Close,
+			}
 		default:
 			return nil
 	}
 }
 
-func CreateNatsListener(server string, callback func(message string, subject string)) error {
-	return createNatsListener(server, callback)
+// CreateListener ...
+func CreateListener(network *Network, callback func(message string, subject string)) error {
+	switch networkType := network.GetNetworkType(); networkType {
+	case NATSNetwork:
+		return createNatsListener(network.GetServerAddress(), callback)
+	default:
+		return nil
+	}
 }
 
 //Privates
@@ -51,23 +74,5 @@ func (c channelMessenger) Subscribe(onEvent func(message string)){
 func (c channelMessenger) Unsubscribe(){
 	if(c.unsub != nil){
 		c.unsub()
-	}
-}
-
-func createNatsMessenger(server string) (ChannelMessenger, error){
-	return getNatsMessenger(server)
-}
-
-func createChannelMessenger(channel string, server string, construction newChannelMessenger) Messenger{
-	messenger, err := construction(server)
-	if(err != nil){
-		panic(err)
-	}
-
-	return channelMessenger{
-		channel: channel,
-		WriteToChannel: messenger.WriteToChannel,
-		SubscribeToChannel: messenger.SubscribeToChannel,
-		Close: messenger.Close,
 	}
 }

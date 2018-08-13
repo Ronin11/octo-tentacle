@@ -27,6 +27,14 @@ func main() {
 	network.AddService(sprinklerService1)
 	// network.AddService(sprinklerService.CreateService(config))
 
+	err := octo.CreateListener(network, func(message string, subject string) {
+		fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
+	})
+	if err != nil{
+		panic(err)
+	}
+
+
 
 	messenger := octo.CreateMessenger("sprinkler.backyard.0.input", network)
 	duration := time.Second
