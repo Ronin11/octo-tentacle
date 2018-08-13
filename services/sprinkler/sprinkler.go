@@ -75,12 +75,12 @@ func (service *sprinklerService) AddToNetwork(network *octo.Network){
 }
 
 func serviceLogic(service *sprinklerService){
-	go func(){
-		for{
-			service.data.SprinklerIsOn = !service.data.SprinklerIsOn
-			time.Sleep(time.Second * 2)
-		}
-	}()
+	// go func(){
+	// 	for{
+	// 		service.data.SprinklerIsOn = !service.data.SprinklerIsOn
+	// 		time.Sleep(time.Second * 2)
+	// 	}
+	// }()
 	
 	go func(){
  		for {
