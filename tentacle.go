@@ -16,20 +16,14 @@ import (
 func main() {
 	fmt.Println("\n~~~~~~~ Starting App ~~~~~~~")
 
-	network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
-	err := octo.CreateNatsListener(network.GetServerAddress(), func(message string, subject string) {
-		fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
-	})
-	if err != nil{
-		panic(err)
-	}
-
-	rwi.Setup()
-	sprinklerPin1 := rwi.OutputPin(24)
-	defer rwi.Close()
+	// rwi.Setup()
+	// sprinklerPin1 := rwi.OutputPin(24)
+	// defer rwi.Close()
 
 	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")
-	sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1)
+	// sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1)
+	sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, rwi.TestOutputRWI{})
+	network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
 	network.AddService(sprinklerService1)
 	// network.AddService(sprinklerService.CreateService(config))
 

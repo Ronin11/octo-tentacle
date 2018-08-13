@@ -22,3 +22,11 @@ const (
 	// RX
 	// TX
 )
+
+type TestOutputRWI struct {
+	state PinState
+}
+
+func (io TestOutputRWI)Write(state PinState){
+	io.state = state
+}
