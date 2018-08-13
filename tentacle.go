@@ -7,10 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/octo-tentacle/pkg/octo"
-	"github.com/octo-tentacle/pkg/rwi"
+	"github.com/Ronin11/octo-tentacle/pkg/octo"
+	"github.com/Ronin11/octo-tentacle/pkg/rwi"
 
-	"github.com/octo-tentacle/services/sprinkler"
+	"github.com/Ronin11/octo-tentacle/services/sprinkler"
 )
 
 func main() {
@@ -26,15 +26,6 @@ func main() {
 	network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
 	network.AddService(sprinklerService1)
 	// network.AddService(sprinklerService.CreateService(config))
-
-	err := octo.CreateListener(network, func(message string, subject string) {
-		fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
-	})
-	if err != nil{
-		panic(err)
-	}
-
-
 
 	messenger := octo.CreateMessenger("sprinkler.backyard.0.input", network)
 	duration := time.Second

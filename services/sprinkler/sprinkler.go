@@ -4,8 +4,8 @@ import (
 	"time"
 	"encoding/json"
 
-	"github.com/octo-tentacle/pkg/octo"
-	"github.com/octo-tentacle/pkg/rwi"
+	"github.com/Ronin11/octo-tentacle/pkg/octo"
+	"github.com/Ronin11/octo-tentacle/pkg/rwi"
 )
 
 type sprinklerAction struct {
