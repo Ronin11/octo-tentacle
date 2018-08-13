@@ -29,8 +29,8 @@ func main() {
 	defer rwi.Close()
 
 	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")
-
-	network.AddService(sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1))
+	sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1)
+	network.AddService(sprinklerService1)
 	// network.AddService(sprinklerService.CreateService(config))
 
 

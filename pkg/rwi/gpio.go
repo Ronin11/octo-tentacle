@@ -48,24 +48,3 @@ func Setup() {
 func Close() {
 	rpio.Close()
 }
-
-// func PinIO(pinNumber int, mode PinMode) RWI{
-// 	pin := rpio.Pin(pinNumber)
-// 	fmt.Println(pin)
-// 	switch mode {
-// 		case Input:
-// 			return inputIO{
-// 				pin: pin,
-// 			}
-// 		case Output:
-// 			return outputIO{
-// 				pin: pin,
-// 			}
-// 		case PWM:
-// 			return pwmIO{
-// 				pin: pin,
-// 			}
-// 		default:
-// 			return nil
-// 	}
-// }

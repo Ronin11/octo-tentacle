@@ -8,6 +8,11 @@ import (
 	"github.com/octo-tentacle/pkg/rwi"
 )
 
+type sprinklerAction struct {
+	octo.Action
+	State sprinklerData `json:"state"`
+}
+
 type sprinklerService struct {
 	serviceCharacteristic octo.Characteristics
 	data sprinklerData
