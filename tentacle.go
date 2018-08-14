@@ -16,33 +16,19 @@ import (
 func main() {
 	fmt.Println("\n~~~~~~~ Starting Tentacle ~~~~~~~")
 
-	// rwi.Setup()
-	// sprinklerPin1 := rwi.OutputPin(24)
-	// defer rwi.Close()
+	rwi.Setup()
+	sprinklerPin0 := rwi.OutputPin(24)
+	sprinklerPin1 := rwi.OutputPin(25)
+	defer rwi.Close()
 
+	sprinklerConfig0 := octo.ReadConfigFile("./services/sprinkler/config.json")
 	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")
-	// sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1)
-	sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, rwi.TestOutputRWI{})
-	network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
-	network.AddService(sprinklerService1)
-	// network.AddService(sprinklerService.CreateService(config))
-
-	// err := octo.CreateListener(network, func(message string, subject string) {
-	// 	fmt.Printf("Subject: %s \tMessage: %s\n", subject, message)
-	// })
-	// if err != nil{
-	// 	panic(err)
-	// }
-
+	sprinklerService0 := sprinklerService.CreateService(sprinklerConfig0, sprinklerPin0)
+	sprinklerService1 := sprinklerService.CreateService(sprinklerConfig1, sprinklerPin1)
 	
-
-	// messenger := octo.CreateMessenger("sprinkler.backyard.0.input", network)
-	// duration := time.Second
-	// time.Sleep(duration)
-	// messenger.Write(`{"Name":"Action Description","State":{"sprinklerIsOn": true,"Duration":"SomeDuration"},"onDone":{"name": "ON DONE"}}`)
-	// messenger.Subscribe(func(message string){
-	// 	fmt.Println("RESPONSE: ", message)
-	// })
+	network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
+	network.AddService(sprinklerService0)
+	network.AddService(sprinklerService1)
 
 	exitSignal := make(chan os.Signal)
 	signal.Notify(exitSignal, syscall.SIGINT, syscall.SIGTERM)
