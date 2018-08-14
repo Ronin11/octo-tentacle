@@ -21,6 +21,9 @@ func main() {
 	sprinklerPin1 := rwi.OutputPin(25)
 	defer rwi.Close()
 
+	// sprinklerPin0 := rwi.TestOutputRWI{}
+	// sprinklerPin1 := rwi.TestOutputRWI{}
+
 	sprinklerConfig0 := octo.ReadConfigFile("./services/sprinkler/config.json")
 	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")
 	sprinklerService0 := sprinklerService.CreateService(sprinklerConfig0, sprinklerPin0)

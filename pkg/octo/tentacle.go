@@ -8,6 +8,7 @@ import (
 
 // Action ...
 type Action struct {
+	Channel string `json:"channel"`
 	Name string `json:"name"`
 	OnDone *Action `json:"onDone"`
 }

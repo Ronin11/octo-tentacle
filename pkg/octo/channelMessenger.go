@@ -9,6 +9,7 @@ import (
 
 // ChannelMessenger ...
 type ChannelMessenger interface {
+	Send(action Action)
 	WriteToChannel(channel string, message string)
 	SubscribeToChannel(channel string, onEvent func(message string)) func() error
 	Close(oof string)
