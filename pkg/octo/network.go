@@ -22,6 +22,14 @@ func JoinNetwork(serverAddress string, networkType NetworkType) *Network{
 	}
 }
 
+// CreateNetwork ...
+// TODO: FIGURE THIS SHIT OUT
+// func CreateNetwork(networkType NetworkType) *Network{
+// 	return &Network{
+// 		networkType: networkType
+// 	}
+// }
+
 // GetServerAddress ...
 func (n Network) GetServerAddress() string{
 	return n.server

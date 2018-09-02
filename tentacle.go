@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "time"
 	"fmt"
 	"os"
 	"os/signal"
@@ -16,13 +15,13 @@ import (
 func main() {
 	fmt.Println("\n~~~~~~~ Starting Tentacle ~~~~~~~")
 
-	rwi.Setup()
-	sprinklerPin0 := rwi.OutputPin(24)
-	sprinklerPin1 := rwi.OutputPin(25)
-	defer rwi.Close()
+	// rwi.Setup()
+	// sprinklerPin0 := rwi.OutputPin(24)
+	// sprinklerPin1 := rwi.OutputPin(25)
+	// defer rwi.Close()
 
-	// sprinklerPin0 := rwi.TestOutputRWI{}
-	// sprinklerPin1 := rwi.TestOutputRWI{}
+	sprinklerPin0 := rwi.TestOutputRWI{}
+	sprinklerPin1 := rwi.TestOutputRWI{}
 
 	sprinklerConfig0 := octo.ReadConfigFile("./services/sprinkler/config.json")
 	sprinklerConfig1 := octo.ReadConfigFile("./services/sprinkler/config.json")

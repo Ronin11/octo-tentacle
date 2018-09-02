@@ -12,11 +12,16 @@ type Messenger interface {
 	Unsubscribe()
 }
 
-func SendAction(action *Action, network *Network){
+type NetworkAction interface {
+	GetChannel() string
+}
+
+func SendAction(action NetworkAction, network *Network){
 	message, err := json.Marshal(action)
 	if err != nil {
 		log.Fatal(err)
 	}
-	messenger := CreateMessenger(action.Channel,network)
+
+	messenger := CreateMessenger(action.GetChannel(),network)
 	messenger.Write(string(message))
 }

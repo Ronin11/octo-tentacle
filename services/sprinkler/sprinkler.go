@@ -1,6 +1,8 @@
 package sprinklerService
 
 import (
+	"fmt"
+	// "os"
 	"time"
 	"encoding/json"
 
@@ -8,22 +10,17 @@ import (
 	"github.com/Ronin11/octo-tentacle/pkg/rwi"
 )
 
-type sprinklerAction struct {
-	octo.Action
-	State sprinklerData `json:"state"`
+type SprinklerData struct {
+	SprinklerIsOn bool `json:"sprinklerIsOn"`
+	Duration int64 `json:"duration"`
 }
 
 type sprinklerService struct {
 	serviceCharacteristic octo.Characteristics
-	data sprinklerData
+	data SprinklerData
 	id int
 	config *octo.Config
 	pin rwi.OutputRWI
-}
-
-type sprinklerData struct {
-	SprinklerIsOn bool `json:"sprinklerIsOn"`
-	Duration string `json:"duration"`
 }
 
 // CreateService ...
@@ -34,7 +31,7 @@ func CreateService(config *octo.Config, pin rwi.OutputRWI) octo.Service{
 			Write: true,
 		},
 		id: 0,
-		data: sprinklerData{
+		data: SprinklerData{
 			SprinklerIsOn: false,
 		},
 		config: config,
@@ -62,9 +59,29 @@ func (service *sprinklerService) SetID(newID int){
 }
 
 func (service *sprinklerService) OnMessage(message string){
-	var action sprinklerAction
+	var action SprinklerAction
 	json.Unmarshal([]byte(message), &action)
 	service.data = action.State
+
+	timer := time.NewTimer(time.Duration(service.data.Duration) * time.Second)
+	go func() {
+		<-timer.C
+		service.data.Duration = 0
+		service.data.SprinklerIsOn = false
+		
+		v, ok := action.OnDone.(octo.Action)
+		fmt.Println(v)
+		fmt.Println(ok)
+
+		// var nextAction SprinklerAction
+		// json.Unmarshal([]byte(action.OnDone), &nextAction)
+		// fmt.Println(nextAction)
+		// if ok {
+		// 	fmt.Println(onDone.GetChannel())
+		// 	// network := octo.JoinNetwork(os.Getenv("SERVER"), octo.NATSNetwork)
+		// 	// octo.SendAction(onDone, network)
+		// }
+	}()
 }
 
 func (service *sprinklerService) AddToNetwork(network *octo.Network){

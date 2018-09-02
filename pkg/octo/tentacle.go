@@ -10,7 +10,12 @@ import (
 type Action struct {
 	Channel string `json:"channel"`
 	Name string `json:"name"`
-	OnDone *Action `json:"onDone"`
+	OnDone interface{} `json:"onDone"`
+}
+
+// GetChannel ...
+func (action *Action) GetChannel() string{
+	return action.Channel
 }
 
 // Trigger ...
